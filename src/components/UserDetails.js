@@ -1,10 +1,13 @@
 import React, { Component } from "react";
+import Repos from "./Repos";
 
 class UserDetails extends Component {
   componentDidMount() {
     this.props.getUser(this.props.match.params.login);
+    this.props.getUserRepos(this.props.match.params.login);
   }
   render() {
+    const {repos} = this.props;
     const { avatar_url, name, location, html_url, bio, blog, followers, following, public_repos } = this.props.user;
     if (name != null) {
       return (
@@ -49,7 +52,7 @@ class UserDetails extends Component {
                   </div>
                 </div>
                 <ul className="list-group list-group-flush">
-                  
+                  <Repos repos={repos} />
                 </ul>
               </div>
             </div>

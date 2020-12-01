@@ -12,31 +12,44 @@ class App extends Component {
     super(props);
     this.searchUsers = this.searchUsers.bind(this);
     this.getUser = this.getUser.bind(this);
+    this.getUserRepos = this.getUserRepos.bind(this);
     this.clearResult = this.clearResult.bind(this);
     this.setAlert = this.setAlert.bind(this);
     this.state = {
       users: [],
       user: {},
+      repos: [],
       alert: null,
+      loading: false,
     };
   }
 
   searchUsers(keyword) {
+    this.setState({ loading: true });
     axios
       .get(`https://api.github.com/search/users?q=${keyword}`)
       .then((res) => {
         this.setState({
           users: res.data.items,
+          loading: false
         });
       });
   }
 
   getUser(username) {
-      axios
-        .get(`https://api.github.com/users/${username}`)
-        .then(res => {
-            this.setState({user: res.data});
-        })
+    axios.get(`https://api.github.com/users/${username}`).then((res) => {
+      this.setState({ user: res.data });
+    });
+  }
+  
+  getUserRepos(username) {
+    this.setState({ loading: true });
+    axios.get(`https://api.github.com/users/${username}/repos`).then((res) =>
+      this.setState({
+        repos: res.data,
+        loading: false,
+      })
+    );
   }
 
   clearResult() {
@@ -61,7 +74,8 @@ class App extends Component {
         <Navbar title="Github Finder" icon="fab fa-github" />
         <Alert alert={this.state.alert} />
         <Switch>
-          <Route exact
+          <Route
+            exact
             path="/"
             render={(props) => (
               <>
@@ -70,12 +84,26 @@ class App extends Component {
                   showClearResult={this.state.users.length > 0 ? true : false}
                   clearResult={this.clearResult}
                   setAlert={this.setAlert}
+                  loading={this.state.loading}
                 />
                 <Users users={this.state.users} />
               </>
             )}
           />
-          <Route path="/user/:login" render={props => (<UserDetails {...props} getUser={this.getUser} user={this.state.user} />)} />
+          <Route
+            path="/user/:login"
+            render={(props) => {
+              return (
+                <UserDetails
+                  {...props}
+                  getUser={this.getUser}
+                  getUserRepos={this.getUserRepos}
+                  user={this.state.user}
+                  repos={this.state.repos}
+                />
+              );
+            }}
+          />
         </Switch>
       </BrowserRouter>
     );
