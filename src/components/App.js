@@ -4,15 +4,19 @@ import Alert from "./Alert";
 import Navbar from "./Navbar";
 import Search from "./Search";
 import Users from "./Users";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
+import UserDetails from "./UserDetails";
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.searchUsers = this.searchUsers.bind(this);
+    this.getUser = this.getUser.bind(this);
     this.clearResult = this.clearResult.bind(this);
     this.setAlert = this.setAlert.bind(this);
     this.state = {
       users: [],
+      user: {},
       alert: null,
     };
   }
@@ -25,6 +29,14 @@ class App extends Component {
           users: res.data.items,
         });
       });
+  }
+
+  getUser(username) {
+      axios
+        .get(`https://api.github.com/users/${username}`)
+        .then(res => {
+            this.setState({user: res.data});
+        })
   }
 
   clearResult() {
@@ -45,17 +57,27 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <BrowserRouter>
         <Navbar title="Github Finder" icon="fab fa-github" />
         <Alert alert={this.state.alert} />
-        <Search
-          searchUsers={this.searchUsers}
-          showClearResult={this.state.users.length > 0 ? true : false}
-          clearResult={this.clearResult}
-          setAlert={this.setAlert}
-        />
-        <Users users={this.state.users} />
-      </div>
+        <Switch>
+          <Route exact
+            path="/"
+            render={(props) => (
+              <>
+                <Search
+                  searchUsers={this.searchUsers}
+                  showClearResult={this.state.users.length > 0 ? true : false}
+                  clearResult={this.clearResult}
+                  setAlert={this.setAlert}
+                />
+                <Users users={this.state.users} />
+              </>
+            )}
+          />
+          <Route path="/user/:login" render={props => (<UserDetails {...props} getUser={this.getUser} user={this.state.user} />)} />
+        </Switch>
+      </BrowserRouter>
     );
   }
 }
