@@ -1,63 +1,56 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 
-class Search extends Component {
-  constructor(props) {
-    super(props);
-    this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.state = {
-      keyword: "",
-    };
-  }
+const Search = (props) => {
+  const [keyword, setKeyword] = useState(props.keyword);
 
-  onChange(keyword) {
-    this.setState({
-      keyword: keyword.target.value,
-    });
-  }
+  const onChange = (e) => {
+    setKeyword(e.target.value);
+  };
 
-  onSubmit(e) {
+  const onSubmit = (e) => {
     e.preventDefault();
-    let item = this.state.keyword;
+    let item = keyword;
     if (item) {
-      this.props.searchUsers(item);
+      props.searchUsers(item);
     } else {
-      this.props.setAlert("Please, enter a keyword or username", "danger");
+      props.setAlert("Please, enter a keyword or username", "danger");
     }
-  }
+  };
 
-  render() {
-    return (
-      <div className="container">
-        <form onSubmit={this.onSubmit}>
-          <div className="input-group mt-3">
-            <input
-              type="text"
-              onChange={this.onChange}
-              className="form-control"
-              value={this.state.keyword}
-            />
-            <div className="input-group-append">
-              <button type="submit" className="btn btn-primary">
-                Search
-              </button>
-            </div>
+  return (
+    <div className="container">
+      <form onSubmit={onSubmit}>
+        <div className="input-group mt-3">
+          <input
+            type="text"
+            onChange={onChange}
+            className="form-control"
+            value={keyword}
+          />
+          <div className="input-group-append">
+            <button type="submit" className="btn btn-primary">
+              Search
+            </button>
           </div>
-        </form>
-        {this.props.showClearResult && (
-          <button
-            className="btn btn-secondary btn-sm btn-block mt-2"
-            onClick={() => {
-              this.props.clearResult();
-              this.setState({keyword: ""});
-            }}
-          >
-            Clear Results
-          </button>
-        )}
-      </div>
-    );
-  }
-}
+        </div>
+      </form>
+      {props.showClearResult && (
+        <button
+          className="btn btn-secondary btn-sm btn-block mt-2"
+          onClick={() => {
+            props.clearResult();
+            setState({ keyword: "" });
+          }}
+        >
+          Clear Results
+        </button>
+      )}
+    </div>
+  );
+};
+
+Search.defaultProps = {
+  keyword: "",
+};
 
 export default Search;
