@@ -39,7 +39,7 @@ const Search = (props) => {
           className="btn btn-secondary btn-sm btn-block mt-2"
           onClick={() => {
             props.clearResult();
-            setState({ keyword: "" });
+            setKeyword('');
           }}
         >
           Clear Results

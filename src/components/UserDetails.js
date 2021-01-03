@@ -1,10 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import Repos from "./Repos";
 
 const UserDetails = (props) => {
   useEffect(() => {
-    props.getUser(this.props.match.params.login);
-    props.getUserRepos(this.props.match.params.login);
+    props.getUser(props.match.params.login);
+    props.getUserRepos(props.match.params.login);
   }, []);
 
   const { repos } = props;
