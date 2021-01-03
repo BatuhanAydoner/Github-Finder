@@ -1,15 +1,18 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import User from "./User";
 import Loading from "./Loading";
+import GithubFinderContext from '../context/githubContext';
 
-const Users = (props) => {
-  if (props.loading) {
+const Users = () => {
+  const {users, loading} = useContext(GithubFinderContext);
+
+  if (loading) {
     return <Loading />;
   }
   return (
     <div className="container mt-3">
       <div className="row">
-        {props.users.map((user, index) => {
+        {users.map((user, index) => {
           return <User key={user.id} user={user} />;
         })}
       </div>

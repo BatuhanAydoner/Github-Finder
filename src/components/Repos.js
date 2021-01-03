@@ -1,11 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import Repo from "./Repo";
+import GithubFinderContext from "../context/githubContext";
 
-const Repos = (props) => {
+const Repos = () => {
+  const {repos} = useContext(GithubFinderContext);
   return (
     <div>
-      {props.repos &&
-        props.repos.map((repo) => {
+      {repos &&
+        repos.map((repo) => {
           return <Repo key={repo.id} repo={repo} />;
         })}
     </div>

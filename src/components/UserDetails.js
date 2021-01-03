@@ -1,13 +1,16 @@
-import React, { Component, useEffect } from "react";
+import React, { Component, useEffect, useContext } from "react";
+import GithubFinderContext from "../context/githubContext";
 import Repos from "./Repos";
 
 const UserDetails = (props) => {
+
+  const {repos, user, getUser, getUserRepos, loading} = useContext(GithubFinderContext);
+
   useEffect(() => {
-    props.getUser(props.match.params.login);
-    props.getUserRepos(props.match.params.login);
+    getUser(props.match.params.login);
+    getUserRepos(props.match.params.login);
   }, []);
 
-  const { repos } = props;
   const {
     avatar_url,
     name,
@@ -18,8 +21,8 @@ const UserDetails = (props) => {
     followers,
     following,
     public_repos,
-  } = props.user;
-  if (name != null) {
+  } = user;
+  if (!loading) {
     return (
       <div className="container my-3">
         <div className="row">

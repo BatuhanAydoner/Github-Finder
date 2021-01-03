@@ -1,8 +1,10 @@
-import React, { Component } from "react";
+import React, { Component, useContext } from "react";
 import { Link } from "react-router-dom";
+import GithubFinderContext from "../context/githubContext";
 
 const User = (props) => {
   const { avatar_url, html_url, login } = props.user;
+
   return (
     <div className="col-md-3 col-sm-6 col-lg-3">
       <div className="card mt-2">

@@ -1,7 +1,12 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useContext } from "react";
+import AlertContext from "../context/alert/alertContext";
+import GithubFinderContext from "../context/githubContext";
 
 const Search = (props) => {
   const [keyword, setKeyword] = useState(props.keyword);
+
+  const {searchUsers, clearResult, users} = useContext(GithubFinderContext);
+  const {setupAlert} = useContext(AlertContext);
 
   const onChange = (e) => {
     setKeyword(e.target.value);
@@ -11,9 +16,9 @@ const Search = (props) => {
     e.preventDefault();
     let item = keyword;
     if (item) {
-      props.searchUsers(item);
+      searchUsers(item);
     } else {
-      props.setAlert("Please, enter a keyword or username", "danger");
+      setupAlert("Please, enter a keyword or username", "danger");
     }
   };
 
@@ -34,11 +39,11 @@ const Search = (props) => {
           </div>
         </div>
       </form>
-      {props.showClearResult && (
+      {users.length > 0 && (
         <button
           className="btn btn-secondary btn-sm btn-block mt-2"
           onClick={() => {
-            props.clearResult();
+            clearResult();
             setKeyword('');
           }}
         >
