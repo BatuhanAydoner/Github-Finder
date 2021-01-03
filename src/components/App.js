@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import UserDetails from "./UserDetails";
 import GithubFinderState from "../context/githubState";
 import AlertState from "../context/alert/alertState";
+import NotFound from './NotFound';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/user/:login" component={UserDetails} />
+            <Route component={NotFound} />
           </Switch>
         </BrowserRouter>
       </AlertState>
